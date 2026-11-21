@@ -31,9 +31,15 @@ function DoctorDashboard() {
   }
 
   useEffect(() => {
-    loadData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    Promise.all([
+      getAppointmentsForDoctor(user.doctorId),
+      getAvailabilityForDoctor(user.doctorId),
+    ]).then(([appointmentData, slotData]) => {
+      setAppointments(appointmentData);
+      setSlots(slotData);
+      setIsLoading(false);
+    });
+  }, [user.doctorId]);
 
   async function handleStatusChange(id, status) {
     await updateAppointmentStatus(id, status);
@@ -105,7 +111,7 @@ function DoctorDashboard() {
                 {a.status === "CONFIRMED" && (
                   <button
                     onClick={() => handleStatusChange(a.id, "COMPLETED")}
-                    className="bg-blue-600 text-white text-sm px-3 py-1 rounded hover:bg-blue-700"
+                    className="bg-primary text-white text-sm px-3 py-1 rounded hover:bg-primary-dark"
                   >
                     Mark Completed
                   </button>
@@ -150,7 +156,7 @@ function DoctorDashboard() {
               required
             />
           </div>
-          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          <button type="submit" className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark">
             Add Slot
           </button>
         </form>

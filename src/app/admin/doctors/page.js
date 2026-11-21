@@ -27,7 +27,10 @@ function ManageDoctors() {
   }
 
   useEffect(() => {
-    loadDoctors();
+    getDoctors().then((data) => {
+      setDoctors(data);
+      setIsLoading(false);
+    });
   }, []);
 
   async function handleSubmit(e) {
@@ -116,7 +119,7 @@ function ManageDoctors() {
         />
 
         <div className="flex gap-3">
-          <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          <button type="submit" className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark">
             {editingId ? "Save Changes" : "Add Doctor"}
           </button>
           {editingId && (
@@ -142,7 +145,7 @@ function ManageDoctors() {
                 <p className="text-sm text-gray-600">{doctor.specialization} - {doctor.experience} yrs</p>
               </div>
               <div className="flex gap-3 text-sm">
-                <button onClick={() => handleEdit(doctor)} className="text-blue-600 hover:underline">
+                <button onClick={() => handleEdit(doctor)} className="text-primary hover:underline">
                   Edit
                 </button>
                 <button onClick={() => handleDelete(doctor.id)} className="text-red-600 hover:underline">

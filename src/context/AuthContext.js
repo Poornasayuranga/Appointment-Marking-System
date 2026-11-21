@@ -10,7 +10,9 @@ export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // localStorage only exists in the browser, so the saved user is read after hydration.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setUser(loadData(CURRENT_USER_KEY, null));
     setIsLoading(false);
   }, []);

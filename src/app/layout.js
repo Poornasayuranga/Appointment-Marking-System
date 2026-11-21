@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
+import MainContainer from "@/components/MainContainer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Appointment Booking System",
+  title: "MediBook | Appointment Booking System",
   description: "Book appointments with doctors online",
 };
 
@@ -24,12 +25,10 @@ export default function RootLayout({ children }) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-gray-50">
+      <body className="min-h-full flex flex-col">
         <AuthProvider>
           <Navbar />
-          <main className="flex-1 max-w-5xl w-full mx-auto px-4 py-6">
-            {children}
-          </main>
+          <MainContainer>{children}</MainContainer>
         </AuthProvider>
       </body>
     </html>

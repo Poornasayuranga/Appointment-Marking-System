@@ -20,7 +20,7 @@ const STATUS_COLORS = {
 function StatCard({ label, value }) {
   return (
     <div className="bg-white border rounded-lg p-4 shadow-sm text-center">
-      <p className="text-2xl font-bold text-blue-600">{value}</p>
+      <p className="text-2xl font-bold text-primary">{value}</p>
       <p className="text-sm text-gray-600">{label}</p>
     </div>
   );
@@ -54,13 +54,13 @@ function AdminDashboard() {
       </div>
 
       <div className="flex flex-wrap gap-4">
-        <Link href="/admin/doctors" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <Link href="/admin/doctors" className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark">
           Manage Doctors
         </Link>
-        <Link href="/admin/patients" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <Link href="/admin/patients" className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark">
           View Patients
         </Link>
-        <Link href="/admin/appointments" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        <Link href="/admin/appointments" className="bg-primary text-white px-4 py-2 rounded hover:bg-primary-dark">
           View All Appointments
         </Link>
       </div>

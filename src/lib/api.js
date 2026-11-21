@@ -68,6 +68,36 @@ export async function login({ email, password }) {
   return delay(user);
 }
 
+export async function updateUserProfile(userId, { name, contactNumber }) {
+  const users = getUsers();
+  const existing = users.find((u) => u.id === userId);
+  if (!existing) throw new Error("User not found.");
+
+  const updatedUser = { ...existing, name, contactNumber };
+  saveData(KEYS.users, users.map((u) => (u.id === userId ? updatedUser : u)));
+
+  // Keep the denormalised patient name on appointments in sync.
+  const appointments = getAppointmentsRaw().map((a) =>
+    a.patientId === userId ? { ...a, patientName: name } : a
+  );
+  saveData(KEYS.appointments, appointments);
+
+  return delay(updatedUser);
+}
+
+export async function changePassword(userId, { currentPassword, newPassword }) {
+  const users = getUsers();
+  const existing = users.find((u) => u.id === userId);
+  if (!existing) throw new Error("User not found.");
+  if (existing.password !== currentPassword) {
+    throw new Error("Current password is incorrect.");
+  }
+
+  const updatedUser = { ...existing, password: newPassword };
+  saveData(KEYS.users, users.map((u) => (u.id === userId ? updatedUser : u)));
+  return delay(updatedUser);
+}
+
 // ---------- Doctors ----------
 
 export async function getDoctors({ search = "", specialization = "" } = {}) {
@@ -174,6 +204,23 @@ export async function getAppointmentsForPatient(patientId) {
   const appointments = getAppointmentsRaw().filter((a) => a.patientId === patientId);
   appointments.sort((a, b) => (a.date + a.startTime).localeCompare(b.date + b.startTime));
   return delay(appointments);
+}
+
+// A patient's medical records = their completed visits, enriched with doctor details.
+export async function getPatientRecords(patientId) {
+  const doctors = getDoctorsRaw();
+  const records = getAppointmentsRaw()
+    .filter((a) => a.patientId === patientId && a.status === "COMPLETED")
+    .map((a) => {
+      const doctor = doctors.find((d) => d.id === a.doctorId);
+      return {
+        ...a,
+        specialization: doctor?.specialization || "General",
+        qualification: doctor?.qualification || "",
+      };
+    })
+    .sort((a, b) => (b.date + b.startTime).localeCompare(a.date + a.startTime));
+  return delay(records);
 }
 
 export async function getAppointmentsForDoctor(doctorId) {
