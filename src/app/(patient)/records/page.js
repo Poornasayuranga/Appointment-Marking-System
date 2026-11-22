@@ -23,7 +23,7 @@ export default function RecordsPage() {
 
   return (
     <div className="animate-fade-up">
-      <PageHeader icon={FileIcon} title="My Records" subtitle="Your profile and completed visit records." />
+      <PageHeader icon={FileIcon} title="Medical Records" subtitle="Your profile and completed visit records." />
 
       {/* Patient summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">

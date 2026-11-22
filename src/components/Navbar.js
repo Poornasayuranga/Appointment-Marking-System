@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useShowSidebar } from "@/components/Sidebar";
 import {
   HeartPulseIcon,
   MenuIcon,
@@ -52,8 +53,10 @@ export default function Navbar() {
 
   const links = getNavLinks(user);
   const onHome = pathname === "/";
+  const showSidebar = useShowSidebar();
   // Over the homepage hero the bar starts transparent and turns solid once scrolled.
-  const solid = scrolled || !onHome || mobileOpen;
+  // With the sidebar beside it, it stays solid so the two read as one frame.
+  const solid = scrolled || !onHome || mobileOpen || showSidebar;
 
   useEffect(() => {
     function onScroll() {

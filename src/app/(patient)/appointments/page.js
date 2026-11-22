@@ -6,10 +6,7 @@ import { getAppointmentsForPatient, cancelAppointment } from "@/lib/api";
 import { useAuth } from "@/context/AuthContext";
 import { PageHeader, EmptyState, LoadingCards, AppointmentCard } from "@/components/PatientUI";
 import { CalendarClockIcon, ClockIcon, CheckCircleIcon, BellIcon } from "@/components/Icons";
-
-function isUpcoming(a, today) {
-  return a.date >= today && a.status !== "CANCELLED" && a.status !== "COMPLETED" && a.status !== "REJECTED";
-}
+import { isUpcomingAppointment as isUpcoming, APPOINTMENTS_CHANGED } from "@/components/Sidebar";
 
 export default function UpcomingAppointmentsPage() {
   const { user } = useAuth();
@@ -36,6 +33,7 @@ export default function UpcomingAppointmentsPage() {
     await cancelAppointment(id);
     await loadAppointments();
     setCancellingId(null);
+    window.dispatchEvent(new Event(APPOINTMENTS_CHANGED));
   }
 
   const today = new Date().toISOString().slice(0, 10);
